@@ -108,7 +108,7 @@ const RequestManagementPage: React.FC = () => {
     }
   };
 
-  const canManageRequest = (request: Request) => {
+  const canManageRequest = (_request: Request) => {
     if (!user) return false;
     return user.role === 'OWNER' || user.role === 'MGMT';
   };

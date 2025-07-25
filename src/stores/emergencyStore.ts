@@ -4,7 +4,6 @@ import type {
   EmergencyIncident, 
   EmergencyContact, 
   EmergencyProtocol,
-  EmergencyCategory,
   IncidentUpdate
 } from '../types/emergency';
 import { useNotificationStore } from './notificationStore';

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { BillingState, Invoice, Payment, InvoiceTemplate, InvoiceStatus } from '../types/billing';
+import type { BillingState, Invoice, Payment, InvoiceTemplate } from '../types/billing';
 
 // サンプルデータ
 const mockInvoices: Invoice[] = [

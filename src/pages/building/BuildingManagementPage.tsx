@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import Layout from '../../components/layout/Layout';
 import { useBuildingStore } from '../../stores/buildingStore';
-import type { Building, Floor, Unit, Tenant } from '../../types/building';
+// import type { Building, Floor, Unit, Tenant } from '../../types/building';
 
 const BuildingManagementPage: React.FC = () => {
   const {
     buildings,
     floors,
     units,
-    tenants,
+    // tenants,
     selectedBuildingId,
     selectBuilding,
     getFloorsByBuilding,
-    getUnitsByFloor,
+    // getUnitsByFloor,
     getTenantsByBuilding,
     getBuildingOccupancyRate
   } = useBuildingStore();
 
   const [activeTab, setActiveTab] = useState<'overview' | 'floors' | 'units' | 'tenants'>('overview');
-  const [selectedFloorId, setSelectedFloorId] = useState<string | null>(null);
+  const [, setSelectedFloorId] = useState<string | null>(null);
 
   const selectedBuilding = buildings.find(b => b.id === selectedBuildingId);
   const buildingFloors = selectedBuildingId ? getFloorsByBuilding(selectedBuildingId) : [];

@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import Layout from '../../components/layout/Layout';
 import { useBuildingStore } from '../../stores/buildingStore';
-import type { Unit, Tenant, Building } from '../../types/building';
+import type { Unit } from '../../types/building';
 
 const VacancyPage: React.FC = () => {
   const { 
     buildings, 
     floors, 
     units, 
-    tenants, 
+    // tenants, 
     selectedBuildingId, 
     selectBuilding,
-    getFloorsByBuilding,
+    // getFloorsByBuilding,
     getAvailableUnits,
-    getBuildingOccupancyRate
+    // getBuildingOccupancyRate
   } = useBuildingStore();
 
   const [selectedUnitType, setSelectedUnitType] = useState<'all' | 'office' | 'retail' | 'warehouse' | 'parking'>('all');

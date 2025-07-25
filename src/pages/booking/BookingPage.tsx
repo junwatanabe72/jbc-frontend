@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Layout from '../../components/layout/Layout';
 import { useBookingStore } from '../../stores/bookingStore';
 import { useAuthStore } from '../../stores/authStore';
-import type { Room, Booking } from '../../types';
+import type { Room } from '../../types';
 
 const BookingPage: React.FC = () => {
-  const { rooms, bookings, addBooking, getBookingsByRoom, getAvailableSlots } = useBookingStore();
+  const { rooms, bookings, addBooking, getBookingsByRoom } = useBookingStore();
   const { user } = useAuthStore();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);

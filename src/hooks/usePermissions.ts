@@ -1,20 +1,24 @@
-import { useMemo } from 'react';
-import { useAuthStore } from '../stores/authStore';
-import { DEFAULT_ROLE_PERMISSIONS, type Permission, type PermissionCheck } from '../types/permissions';
+import { useMemo, type FC, type ReactNode, createElement } from "react";
+import { useAuthStore } from "../stores/authStore";
+import {
+  DEFAULT_ROLE_PERMISSIONS,
+  type Permission,
+  type PermissionCheck,
+} from "../types/permissions";
 
 export const usePermissions = (): PermissionCheck => {
   const { user } = useAuthStore();
 
-  const userPermissions = useMemo(() => {
+  const userPermissions = useMemo<Permission[]>(() => {
     if (!user) return [];
-    
+
     // デフォルトのロール権限を取得
     const rolePermissions = DEFAULT_ROLE_PERMISSIONS[user.role] || [];
-    
+
     // TODO: ここで個別のユーザー権限も考慮する
     // const customPermissions = getUserCustomPermissions(user.id);
     // return [...rolePermissions, ...customPermissions];
-    
+
     return rolePermissions;
   }, [user]);
 
@@ -23,11 +27,11 @@ export const usePermissions = (): PermissionCheck => {
   };
 
   const hasAnyPermission = (permissions: Permission[]): boolean => {
-    return permissions.some(permission => hasPermission(permission));
+    return permissions.some((permission) => hasPermission(permission));
   };
 
   const hasAllPermissions = (permissions: Permission[]): boolean => {
-    return permissions.every(permission => hasPermission(permission));
+    return permissions.every((permission) => hasPermission(permission));
   };
 
   const canAccess = (resource: string, action: string): boolean => {
@@ -39,7 +43,7 @@ export const usePermissions = (): PermissionCheck => {
     hasPermission,
     hasAnyPermission,
     hasAllPermissions,
-    canAccess
+    canAccess,
   };
 };
 
@@ -48,26 +52,31 @@ interface PermissionGuardProps {
   permission?: Permission;
   permissions?: Permission[];
   requireAll?: boolean;
-  fallback?: React.ReactNode;
-  children: React.ReactNode;
+  fallback?: ReactNode;
+  children: ReactNode;
 }
 
-export const PermissionGuard: React.FC<PermissionGuardProps> = ({
+export const PermissionGuard: FC<PermissionGuardProps> = ({
   permission,
   permissions,
   requireAll = false,
   fallback = null,
-  children
+  children,
 }) => {
-  const { hasPermission, hasAnyPermission, hasAllPermissions } = usePermissions();
+  const { hasPermission, hasAnyPermission, hasAllPermissions } =
+    usePermissions();
 
   let hasAccess = false;
 
   if (permission) {
     hasAccess = hasPermission(permission);
   } else if (permissions) {
-    hasAccess = requireAll ? hasAllPermissions(permissions) : hasAnyPermission(permissions);
+    hasAccess = requireAll
+      ? hasAllPermissions(permissions)
+      : hasAnyPermission(permissions);
   }
 
-  return hasAccess ? <>{children}</> : <>{fallback}</>;
+  return hasAccess
+    ? createElement("div", null, children)
+    : createElement("div", null, fallback);
 };

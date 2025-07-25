@@ -8,7 +8,7 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ onDateSelect, onEventClick }) => {
-  const { events, selectedDate, setSelectedDate, getEventsByDate } = useEventStore();
+  const { selectedDate, setSelectedDate, getEventsByDate } = useEventStore();
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const getDaysInMonth = (date: Date) => {

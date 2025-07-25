@@ -1,36 +1,40 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuthStore } from './stores/authStore';
-import LoginPage from './pages/auth/LoginPage';
-import OwnerDashboard from './pages/dashboard/OwnerDashboard';
-import MgmtDashboard from './pages/dashboard/MgmtDashboard';
-import TenantDashboard from './pages/dashboard/TenantDashboard';
-import BrokerDashboard from './pages/dashboard/BrokerDashboard';
-import CalendarPage from './pages/calendar/CalendarPage';
-import BookingPage from './pages/booking/BookingPage';
-import BookingManagementPage from './pages/booking/BookingManagementPage';
-import RequestPage from './pages/request/RequestPage';
-import RequestManagementPage from './pages/request/RequestManagementPage';
-import BuildingManagementPage from './pages/building/BuildingManagementPage';
-import BillingPage from './pages/billing/BillingPage';
-import AnalyticsPage from './pages/analytics/AnalyticsPage';
-import VacancyPage from './pages/vacancy/VacancyPage';
-import ProtectedRoute from './components/common/ProtectedRoute';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useAuthStore } from "./stores/authStore";
+import LoginPage from "./pages/auth/LoginPage";
+import OwnerDashboard from "./pages/dashboard/OwnerDashboard";
+import MgmtDashboard from "./pages/dashboard/MgmtDashboard";
+import TenantDashboard from "./pages/dashboard/TenantDashboard";
+import BrokerDashboard from "./pages/dashboard/BrokerDashboard";
+import CalendarPage from "./pages/calendar/CalendarPage";
+import BookingPage from "./pages/booking/BookingPage";
+import BookingManagementPage from "./pages/booking/BookingManagementPage";
+import RequestPage from "./pages/request/RequestPage";
+import RequestManagementPage from "./pages/request/RequestManagementPage";
+import BuildingManagementPage from "./pages/building/BuildingManagementPage";
+import BillingPage from "./pages/billing/BillingPage";
+import AnalyticsPage from "./pages/analytics/AnalyticsPage";
+import VacancyPage from "./pages/vacancy/VacancyPage";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
   const { isAuthenticated, user } = useAuthStore();
 
   const getDashboardComponent = () => {
     if (!user) return null;
-    
+
     switch (user.role) {
-      case 'OWNER':
+      case "OWNER":
         return <OwnerDashboard />;
-      case 'MGMT':
+      case "MGMT":
         return <MgmtDashboard />;
-      case 'TENANT':
+      case "TENANT":
         return <TenantDashboard />;
-      case 'BROKER':
+      case "BROKER":
         return <BrokerDashboard />;
       default:
         return <div>Unknown role</div>;
@@ -40,97 +44,101 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/login" 
+        <Route
+          path="/login"
           element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />
-          } 
+            isAuthenticated ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <LoginPage />
+            )
+          }
         />
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute>
-              {getDashboardComponent()}
-            </ProtectedRoute>
-          } 
+        <Route
+          path="/dashboard"
+          element={<ProtectedRoute>{getDashboardComponent()}</ProtectedRoute>}
         />
-        <Route 
-          path="/calendar" 
+        <Route
+          path="/calendar"
           element={
-            <ProtectedRoute allowedRoles={['OWNER', 'MGMT', 'TENANT']}>
+            <ProtectedRoute allowedRoles={["OWNER", "MGMT", "TENANT"]}>
               <CalendarPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/bookings" 
+        <Route
+          path="/bookings"
           element={
-            <ProtectedRoute allowedRoles={['TENANT']}>
+            <ProtectedRoute allowedRoles={["TENANT"]}>
               <BookingPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/booking-management" 
+        <Route
+          path="/booking-management"
           element={
-            <ProtectedRoute allowedRoles={['OWNER', 'MGMT']}>
+            <ProtectedRoute allowedRoles={["OWNER", "MGMT"]}>
               <BookingManagementPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/requests" 
+        <Route
+          path="/requests"
           element={
-            <ProtectedRoute allowedRoles={['OWNER', 'MGMT']}>
+            <ProtectedRoute allowedRoles={["OWNER", "MGMT"]}>
               <RequestManagementPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/apply" 
+        <Route
+          path="/apply"
           element={
-            <ProtectedRoute allowedRoles={['TENANT']}>
+            <ProtectedRoute allowedRoles={["TENANT"]}>
               <RequestPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/building-management" 
+        <Route
+          path="/building-management"
           element={
-            <ProtectedRoute allowedRoles={['OWNER', 'MGMT']}>
+            <ProtectedRoute allowedRoles={["OWNER", "MGMT"]}>
               <BuildingManagementPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/billing" 
+        <Route
+          path="/billing"
           element={
-            <ProtectedRoute allowedRoles={['OWNER', 'MGMT']}>
+            <ProtectedRoute allowedRoles={["OWNER", "MGMT"]}>
               <BillingPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/analytics" 
+        <Route
+          path="/analytics"
           element={
-            <ProtectedRoute allowedRoles={['OWNER', 'MGMT']}>
+            <ProtectedRoute allowedRoles={["OWNER", "MGMT"]}>
               <AnalyticsPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/vacancies" 
+        <Route
+          path="/vacancies"
           element={
-            <ProtectedRoute allowedRoles={['BROKER']}>
+            <ProtectedRoute allowedRoles={["BROKER"]}>
               <VacancyPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
-          } 
+            isAuthenticated ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
         />
       </Routes>
     </Router>

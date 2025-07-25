@@ -66,16 +66,16 @@ const RequestForm: React.FC<RequestFormProps> = ({ isOpen, onClose }) => {
     });
   };
 
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'maintenance': return 'メンテナンス';
-      case 'construction': return '工事';
-      case 'move_in_out': return '搬入・搬出';
-      case 'equipment': return '設備';
-      case 'other': return 'その他';
-      default: return type;
-    }
-  };
+  // const getTypeLabel = (type: string) => {
+  //   switch (type) {
+  //     case 'maintenance': return 'メンテナンス';
+  //     case 'construction': return '工事';
+  //     case 'move_in_out': return '搬入・搬出';
+  //     case 'equipment': return '設備';
+  //     case 'other': return 'その他';
+  //     default: return type;
+  //   }
+  // };
 
 
   if (!isOpen) return null;

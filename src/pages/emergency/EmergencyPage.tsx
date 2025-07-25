@@ -14,17 +14,14 @@ const EmergencyPage: React.FC = () => {
     protocols,
     activeIncidents,
     reportIncident,
-    updateIncident,
     addIncidentUpdate,
     acknowledgeIncident,
     resolveIncident,
-    getActiveIncidents,
-    getCriticalIncidents,
-    getProtocolByCategory
+    getCriticalIncidents
   } = useEmergencyStore();
 
   const [activeTab, setActiveTab] = useState<'incidents' | 'report' | 'contacts' | 'protocols'>('incidents');
-  const [showReportModal, setShowReportModal] = useState(false);
+  const [, setShowReportModal] = useState(false);
   const [selectedIncident, setSelectedIncident] = useState<EmergencyIncident | null>(null);
   const [newUpdate, setNewUpdate] = useState('');
 
@@ -75,7 +72,7 @@ const EmergencyPage: React.FC = () => {
   };
 
   const getStatusLabel = (status: string) => {
-    const labels = {
+    const labels: Record<string, string> = {
       reported: '📋 報告済み',
       acknowledged: '👁️ 確認済み',
       responding: '🏃 対応中',
@@ -86,7 +83,7 @@ const EmergencyPage: React.FC = () => {
   };
 
   const getStatusColor = (status: string) => {
-    const colors = {
+    const colors: Record<string, string> = {
       reported: 'bg-blue-100 text-blue-800',
       acknowledged: 'bg-yellow-100 text-yellow-800',
       responding: 'bg-purple-100 text-purple-800',
@@ -274,7 +271,7 @@ const EmergencyPage: React.FC = () => {
                           </button>
                           {incident.status === 'reported' && user?.role !== 'TENANT' && (
                             <button
-                              onClick={() => acknowledgeIncident(incident.id, user.id)}
+                              onClick={() => acknowledgeIncident(incident.id, user!.id)}
                               className="px-3 py-1 text-sm bg-yellow-600 text-white rounded hover:bg-yellow-700"
                             >
                               確認
@@ -282,7 +279,7 @@ const EmergencyPage: React.FC = () => {
                           )}
                           {incident.status !== 'resolved' && incident.status !== 'closed' && user?.role !== 'TENANT' && (
                             <button
-                              onClick={() => resolveIncident(incident.id, user.id)}
+                              onClick={() => resolveIncident(incident.id, user!.id)}
                               className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
                             >
                               解決

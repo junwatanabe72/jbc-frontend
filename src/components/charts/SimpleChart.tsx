@@ -100,7 +100,7 @@ interface BarChartProps {
 // シンプルな棒グラフ
 export const BarChart: React.FC<BarChartProps> = ({ 
   data, 
-  height = 200, 
+  height: _height = 200, 
   showValues = true,
   title 
 }) => {
@@ -164,7 +164,7 @@ export const PieChart: React.FC<PieChartProps> = ({
       <div className="flex items-center space-x-6">
         <svg width={size} height={size} className="transform -rotate-90">
           {data.map((item, index) => {
-            const percentage = (item.value / total) * 100;
+            // const percentage = (item.value / total) * 100;
             const angle = (item.value / total) * 360;
             const radius = size / 2 - 10;
             const centerX = size / 2;
