@@ -42,7 +42,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename="/jbc-frontend">
       <Routes>
         <Route
           path="/login"
