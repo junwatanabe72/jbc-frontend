@@ -1,5 +1,5 @@
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -42,7 +42,7 @@ function App() {
   };
 
   return (
-    <Router basename="/jbc-frontend">
+    <Router>
       <Routes>
         <Route
           path="/login"
@@ -150,7 +150,7 @@ function App() {
                 <p className="text-gray-600 mb-2">Current hash: {window.location.hash}</p>
                 <p className="text-gray-600 mb-2">Is authenticated: {isAuthenticated.toString()}</p>
                 <p className="text-gray-600 mb-4">User: {user?.email || 'none'}</p>
-                <a href="/jbc-frontend/login" className="text-blue-600 hover:text-blue-800">Go to Login</a>
+                <a href="/jbc-frontend/#/login" className="text-blue-600 hover:text-blue-800">Go to Login</a>
               </div>
             </div>
           }
