@@ -140,6 +140,21 @@ function App() {
             )
           }
         />
+        <Route
+          path="*"
+          element={
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+              <div className="text-center">
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">Debug Info</h1>
+                <p className="text-gray-600 mb-2">Current path: {window.location.pathname}</p>
+                <p className="text-gray-600 mb-2">Current hash: {window.location.hash}</p>
+                <p className="text-gray-600 mb-2">Is authenticated: {isAuthenticated.toString()}</p>
+                <p className="text-gray-600 mb-4">User: {user?.email || 'none'}</p>
+                <a href="/jbc-frontend/login" className="text-blue-600 hover:text-blue-800">Go to Login</a>
+              </div>
+            </div>
+          }
+        />
       </Routes>
     </Router>
   );
