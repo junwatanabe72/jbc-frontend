@@ -60,25 +60,92 @@ const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, event, selecte
     
     if (!user) return;
 
-    const eventData = {
-      title: formData.title,
-      description: formData.description,
-      type: formData.type,
-      status: formData.status,
-      startTime: new Date(formData.startTime),
-      endTime: new Date(formData.endTime),
-      location: formData.location,
-      organizer: formData.organizer,
-      createdBy: user.id,
-    };
+    const startTime = new Date(formData.startTime);
+    const endTime = new Date(formData.endTime);
+
+    // 日を跨ぐかチェック
+    const spanMultipleDays = startTime.toDateString() !== endTime.toDateString();
 
     if (event) {
+      // 編集時は単一イベントとして更新
+      const eventData = {
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        status: formData.status,
+        startTime,
+        endTime,
+        location: formData.location,
+        organizer: formData.organizer,
+        createdBy: user.id,
+      };
       updateEvent(event.id, eventData);
     } else {
-      addEvent(eventData);
+      // 新規作成時は日を跨ぐ場合、連続して登録
+      if (spanMultipleDays) {
+        const events = createMultiDayEvents(startTime, endTime);
+        events.forEach(eventData => addEvent(eventData));
+      } else {
+        const eventData = {
+          title: formData.title,
+          description: formData.description,
+          type: formData.type,
+          status: formData.status,
+          startTime,
+          endTime,
+          location: formData.location,
+          organizer: formData.organizer,
+          createdBy: user.id,
+        };
+        addEvent(eventData);
+      }
     }
 
     onClose();
+  };
+
+  const createMultiDayEvents = (startTime: Date, endTime: Date) => {
+    const events = [];
+    const currentDate = new Date(startTime);
+    
+    while (currentDate <= endTime) {
+      const dayStart = new Date(currentDate);
+      const dayEnd = new Date(currentDate);
+      
+      if (currentDate.toDateString() === startTime.toDateString()) {
+        // 初日：開始時間から23:59まで
+        dayStart.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
+        dayEnd.setHours(23, 59, 59, 999);
+      } else if (currentDate.toDateString() === endTime.toDateString()) {
+        // 最終日：0:00から終了時間まで
+        dayStart.setHours(0, 0, 0, 0);
+        dayEnd.setHours(endTime.getHours(), endTime.getMinutes(), 0, 0);
+      } else {
+        // 中間日：終日
+        dayStart.setHours(0, 0, 0, 0);
+        dayEnd.setHours(23, 59, 59, 999);
+      }
+
+      const dayTitle: string = events.length === 0 
+        ? formData.title 
+        : `${formData.title} (${events.length + 1}日目)`;
+
+      events.push({
+        title: dayTitle,
+        description: formData.description,
+        type: formData.type,
+        status: formData.status,
+        startTime: dayStart,
+        endTime: dayEnd,
+        location: formData.location,
+        organizer: formData.organizer,
+        createdBy: user!.id,
+      });
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return events;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

@@ -19,6 +19,11 @@ import BuildingManagementPage from "./pages/building/BuildingManagementPage";
 import BillingPage from "./pages/billing/BillingPage";
 import AnalyticsPage from "./pages/analytics/AnalyticsPage";
 import VacancyPage from "./pages/vacancy/VacancyPage";
+import BusinessReportsPage from "./pages/reports/BusinessReportsPage";
+import BuildingRulesPage from "./pages/rules/BuildingRulesPage";
+import EmergencyContactPage from "./pages/emergency/EmergencyContactPage";
+import FloorPlanDownloadPage from "./pages/downloads/FloorPlanDownloadPage";
+import ContractsPage from "./pages/contracts/ContractsPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
@@ -127,6 +132,46 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["BROKER"]}>
               <VacancyPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute allowedRoles={["MGMT"]}>
+              <BusinessReportsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/rules"
+          element={
+            <ProtectedRoute allowedRoles={["TENANT"]}>
+              <BuildingRulesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/emergency"
+          element={
+            <ProtectedRoute allowedRoles={["OWNER", "MGMT", "TENANT", "BROKER"]}>
+              <EmergencyContactPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/downloads"
+          element={
+            <ProtectedRoute allowedRoles={["BROKER"]}>
+              <FloorPlanDownloadPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contracts"
+          element={
+            <ProtectedRoute allowedRoles={["BROKER"]}>
+              <ContractsPage />
             </ProtectedRoute>
           }
         />

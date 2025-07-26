@@ -16,12 +16,31 @@ const RequestManagementPage: React.FC = () => {
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'maintenance': return 'メンテナンス';
+      case 'maintenance': return '修繕';
       case 'construction': return '工事';
       case 'move_in_out': return '搬入・搬出';
       case 'equipment': return '設備';
+      case 'booking': return '会議予約';
+      case 'parking': return '駐車場';
+      case 'emergency': return '緊急';
+      case 'event': return 'イベント';
       case 'other': return 'その他';
       default: return type;
+    }
+  };
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case 'maintenance': return 'bg-green-100 text-green-800';
+      case 'construction': return 'bg-orange-100 text-orange-800';
+      case 'move_in_out': return 'bg-purple-100 text-purple-800';
+      case 'equipment': return 'bg-indigo-100 text-indigo-800';
+      case 'booking': return 'bg-blue-100 text-blue-800';
+      case 'parking': return 'bg-purple-100 text-purple-800';
+      case 'emergency': return 'bg-red-100 text-red-800';
+      case 'event': return 'bg-yellow-100 text-yellow-800';
+      case 'other': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -181,12 +200,16 @@ const RequestManagementPage: React.FC = () => {
                   <tr key={request.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
+                        <div className="flex items-center space-x-2 mb-1">
+                          <span className={`px-2 py-1 text-xs rounded ${getTypeColor(request.type)}`}>
+                            {getTypeLabel(request.type)}
+                          </span>
+                        </div>
                         <div className="text-sm font-medium text-gray-900">
                           {request.title}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {getTypeLabel(request.type)}
-                          {request.location && ` • ${request.location}`}
+                          {request.location && `場所: ${request.location}`}
                         </div>
                       </div>
                     </td>

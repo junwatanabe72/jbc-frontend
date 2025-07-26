@@ -87,7 +87,7 @@ export interface BookingState {
   rejectBooking: (id: string, reason: string, rejectedBy: string) => void;
 }
 
-export type RequestType = 'maintenance' | 'construction' | 'move_in_out' | 'equipment' | 'other';
+export type RequestType = 'maintenance' | 'construction' | 'move_in_out' | 'equipment' | 'booking' | 'parking' | 'emergency' | 'event' | 'other';
 export type RequestStatus = 'draft' | 'submitted' | 'under_review' | 'approved' | 'rejected' | 'completed';
 export type RequestPriority = 'low' | 'medium' | 'high' | 'urgent';
 

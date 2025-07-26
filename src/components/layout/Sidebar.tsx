@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useAuthStore } from '../../stores/authStore';
-import type { UserRole } from '../../types';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../stores/authStore";
+import type { UserRole } from "../../types";
 
 interface NavItem {
   name: string;
@@ -10,29 +10,43 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { name: 'ダッシュボード', href: '/dashboard', roles: ['OWNER', 'MGMT', 'TENANT', 'BROKER'] },
-  { name: 'カレンダー', href: '/calendar', roles: ['OWNER', 'MGMT', 'TENANT'] },
-  // ビル管理
-  { name: 'ビル管理', href: '/building-management', roles: ['OWNER', 'MGMT'] },
-  { name: '請求書管理', href: '/billing', roles: ['OWNER', 'MGMT'] },
-  { name: 'レポート・分析', href: '/analytics', roles: ['OWNER', 'MGMT'] },
-  // 会議室予約フロー（独立）
-  { name: '会議室予約', href: '/bookings', roles: ['TENANT'] },
-  { name: '予約管理', href: '/booking-management', roles: ['OWNER', 'MGMT'] },
-  // 各種申請フロー（独立）
-  { name: '各種申請', href: '/apply', roles: ['TENANT'] },
-  { name: '申請受付・承認', href: '/requests', roles: ['OWNER', 'MGMT'] },
-  // その他
-  { name: '空室情報', href: '/vacancies', roles: ['BROKER'] },
-  { name: '緊急連絡', href: '/emergency', roles: ['OWNER', 'MGMT', 'TENANT'] },
+  {
+    name: "ダッシュボード",
+    href: "/dashboard",
+    roles: ["OWNER", "MGMT", "TENANT", "BROKER"],
+  },
+
+  // オーナー専用
+  { name: "イベントカレンダー", href: "/calendar", roles: ["OWNER"] },
+  { name: "受付・承認", href: "/requests", roles: ["OWNER"] },
+  { name: "運用状況確認", href: "/analytics", roles: ["OWNER"] },
+  { name: "緊急連絡", href: "/emergency", roles: ["OWNER"] },
+
+  // 管理会社専用
+  { name: "イベントカレンダー", href: "/calendar", roles: ["MGMT"] },
+  { name: "業務報告", href: "/reports", roles: ["MGMT"] },
+  { name: "請求等", href: "/billing", roles: ["MGMT"] },
+  { name: "緊急連絡", href: "/emergency", roles: ["MGMT"] },
+
+  // テナント専用
+  { name: "イベントカレンダー", href: "/calendar", roles: ["TENANT"] },
+  { name: "手続き・予約", href: "/apply", roles: ["TENANT"] },
+  { name: "館内細則", href: "/rules", roles: ["TENANT"] },
+  { name: "緊急連絡", href: "/emergency", roles: ["TENANT"] },
+
+  // 仲介会社専用
+  { name: "空室情報確認", href: "/vacancies", roles: ["BROKER"] },
+  { name: "図面ダウンロード", href: "/downloads", roles: ["BROKER"] },
+  { name: "契約書・館内細則", href: "/contracts", roles: ["BROKER"] },
+  { name: "緊急連絡", href: "/emergency", roles: ["BROKER"] },
 ];
 
 const Sidebar: React.FC = () => {
   const { user } = useAuthStore();
   const location = useLocation();
 
-  const availableItems = navItems.filter(item => 
-    user && item.roles.includes(user.role)
+  const availableItems = navItems.filter(
+    (item) => user && item.roles.includes(user.role)
   );
 
   return (
@@ -47,8 +61,8 @@ const Sidebar: React.FC = () => {
                   to={item.href}
                   className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
                     isActive
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white"
                   }`}
                 >
                   {item.name}

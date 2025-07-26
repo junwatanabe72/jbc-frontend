@@ -43,6 +43,62 @@ const Calendar: React.FC<CalendarProps> = ({ onDateSelect, onEventClick }) => {
     }
   };
 
+  const calculateEventLayout = (events: Event[]) => {
+    if (events.length <= 1) return events.map((event, index) => ({ event, width: 100, left: 0, top: index * 16 }));
+
+    // 時間でソート
+    const sortedEvents = [...events].sort((a, b) => 
+      new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+    );
+
+    // 重複グループを見つける
+    const overlapGroups: Event[][] = [];
+    
+    sortedEvents.forEach(event => {
+      // このイベントが既存のグループと重複するかチェック
+      let addedToGroup = false;
+      
+      for (let i = 0; i < overlapGroups.length; i++) {
+        const group = overlapGroups[i];
+        const hasOverlap = group.some(groupEvent => 
+          new Date(event.startTime) < new Date(groupEvent.endTime) && 
+          new Date(event.endTime) > new Date(groupEvent.startTime)
+        );
+        
+        if (hasOverlap) {
+          group.push(event);
+          addedToGroup = true;
+          break;
+        }
+      }
+      
+      if (!addedToGroup) {
+        overlapGroups.push([event]);
+      }
+    });
+
+    // レイアウトを計算
+    const layouts: Array<{ event: Event; width: number; left: number; top: number }> = [];
+    let currentTop = 0;
+
+    overlapGroups.forEach(group => {
+      const groupWidth = Math.floor(100 / group.length);
+      
+      group.forEach((event, index) => {
+        layouts.push({
+          event,
+          width: groupWidth,
+          left: index * groupWidth,
+          top: currentTop
+        });
+      });
+      
+      currentTop += 16; // 次のグループは下に配置
+    });
+
+    return layouts;
+  };
+
   const daysInMonth = getDaysInMonth(currentMonth);
   const firstDay = getFirstDayOfMonth(currentMonth);
   const monthNames = [
@@ -77,11 +133,17 @@ const Calendar: React.FC<CalendarProps> = ({ onDateSelect, onEventClick }) => {
         <div className={`text-sm font-medium ${isToday ? 'text-blue-600' : 'text-gray-900'}`}>
           {day}
         </div>
-        <div className="mt-1 space-y-1">
-          {dayEvents.slice(0, 3).map((event) => (
+        <div className="mt-1 relative h-24">
+          {calculateEventLayout(dayEvents.slice(0, 3)).map(({ event, width, left, top }) => (
             <div
               key={event.id}
-              className={`text-xs px-1 py-0.5 rounded truncate cursor-pointer ${getEventTypeColor(event.type)}`}
+              className={`absolute text-xs px-1 py-0.5 rounded truncate cursor-pointer ${getEventTypeColor(event.type)}`}
+              style={{
+                width: `${width}%`,
+                left: `${left}%`,
+                top: `${top}px`,
+                height: '14px'
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 onEventClick?.(event);
@@ -92,7 +154,7 @@ const Calendar: React.FC<CalendarProps> = ({ onDateSelect, onEventClick }) => {
             </div>
           ))}
           {dayEvents.length > 3 && (
-            <div className="text-xs text-gray-500">
+            <div className="absolute text-xs text-gray-500 bottom-0">
               +{dayEvents.length - 3} more
             </div>
           )}
